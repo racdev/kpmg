@@ -1,0 +1,1081 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.three-tier.module.alb.aws_lb.this[0] will be created
+  + resource "aws_lb" "this" {
+      + arn                        = (known after apply)
+      + arn_suffix                 = (known after apply)
+      + desync_mitigation_mode     = "defensive"
+      + dns_name                   = (known after apply)
+      + drop_invalid_header_fields = false
+      + enable_deletion_protection = false
+      + enable_http2               = true
+      + enable_waf_fail_open       = false
+      + id                         = (known after apply)
+      + idle_timeout               = 60
+      + internal                   = false
+      + ip_address_type            = "ipv4"
+      + load_balancer_type         = "application"
+      + name                       = "alb"
+      + security_groups            = (known after apply)
+      + subnets                    = (known after apply)
+      + tags                       = {
+          + "Environment" = "dev"
+          + "Name"        = "alb"
+          + "Terraform"   = "true"
+        }
+      + tags_all                   = {
+          + "Environment" = "dev"
+          + "Name"        = "alb"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                     = (known after apply)
+      + zone_id                    = (known after apply)
+
+      + subnet_mapping {
+          + allocation_id        = (known after apply)
+          + ipv6_address         = (known after apply)
+          + outpost_id           = (known after apply)
+          + private_ipv4_address = (known after apply)
+          + subnet_id            = (known after apply)
+        }
+
+      + timeouts {
+          + create = "10m"
+          + delete = "10m"
+          + update = "10m"
+        }
+    }
+
+  # module.three-tier.module.alb.aws_lb_listener.frontend_http_tcp[0] will be created
+  + resource "aws_lb_listener" "frontend_http_tcp" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + load_balancer_arn = (known after apply)
+      + port              = 80
+      + protocol          = "HTTP"
+      + ssl_policy        = (known after apply)
+      + tags              = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + tags_all          = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+    }
+
+  # module.three-tier.module.alb.aws_lb_target_group.main[0] will be created
+  + resource "aws_lb_target_group" "main" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = false
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancing_algorithm_type      = (known after apply)
+      + name                               = "asg"
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + slow_start                         = 0
+      + tags                               = {
+          + "Environment" = "dev"
+          + "Name"        = "asg"
+          + "Terraform"   = "true"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "Name"        = "asg"
+          + "Terraform"   = "true"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = (known after apply)
+
+      + health_check {
+          + enabled             = (known after apply)
+          + healthy_threshold   = (known after apply)
+          + interval            = (known after apply)
+          + matcher             = (known after apply)
+          + path                = (known after apply)
+          + port                = (known after apply)
+          + protocol            = (known after apply)
+          + timeout             = (known after apply)
+          + unhealthy_threshold = (known after apply)
+        }
+
+      + stickiness {
+          + cookie_duration = (known after apply)
+          + cookie_name     = (known after apply)
+          + enabled         = (known after apply)
+          + type            = (known after apply)
+        }
+    }
+
+  # module.three-tier.module.asg.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                       = (known after apply)
+      + availability_zones        = (known after apply)
+      + default_cooldown          = (known after apply)
+      + desired_capacity          = 2
+      + force_delete              = false
+      + force_delete_warm_pool    = false
+      + health_check_grace_period = 300
+      + health_check_type         = (known after apply)
+      + id                        = (known after apply)
+      + max_size                  = 5
+      + metrics_granularity       = "1Minute"
+      + min_size                  = 0
+      + name                      = (known after apply)
+      + name_prefix               = "asg-"
+      + protect_from_scale_in     = false
+      + service_linked_role_arn   = (known after apply)
+      + target_group_arns         = (known after apply)
+      + vpc_zone_identifier       = (known after apply)
+      + wait_for_capacity_timeout = "10m"
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "dev"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "asg"
+        }
+      + tag {
+          + key                 = "Terraform"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + timeouts {}
+    }
+
+  # module.three-tier.module.asg.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                    = (known after apply)
+      + default_version        = (known after apply)
+      + id                     = (known after apply)
+      + image_id               = "ami-760aaa0f"
+      + instance_type          = "t3.medium"
+      + latest_version         = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "asg-"
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + vpc_security_group_ids = (known after apply)
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = (known after apply)
+          + instance_metadata_tags      = (known after apply)
+        }
+    }
+
+  # module.three-tier.module.asg_sg.aws_security_group.this_name_prefix[0] will be created
+  + resource "aws_security_group" "this_name_prefix" {
+      + arn                    = (known after apply)
+      + description            = "ASG security group"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "asg-"
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "asg"
+          + "Terraform"   = "true"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "asg"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                 = (known after apply)
+
+      + timeouts {
+          + create = "10m"
+          + delete = "15m"
+        }
+    }
+
+  # module.three-tier.module.asg_sg.aws_security_group_rule.computed_ingress_with_source_security_group_id[0] will be created
+  + resource "aws_security_group_rule" "computed_ingress_with_source_security_group_id" {
+      + description              = "Ingress Rule"
+      + from_port                = 80
+      + id                       = (known after apply)
+      + prefix_list_ids          = []
+      + protocol                 = "tcp"
+      + security_group_id        = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 80
+      + type                     = "ingress"
+    }
+
+  # module.three-tier.module.asg_sg.aws_security_group_rule.egress_with_source_security_group_id[0] will be created
+  + resource "aws_security_group_rule" "egress_with_source_security_group_id" {
+      + description              = "PostgreSQL access from ASG"
+      + from_port                = 5432
+      + id                       = (known after apply)
+      + prefix_list_ids          = []
+      + protocol                 = "tcp"
+      + security_group_id        = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 5432
+      + type                     = "egress"
+    }
+
+  # module.three-tier.module.db.random_password.master_password[0] will be created
+  + resource "random_password" "master_password" {
+      + id          = (known after apply)
+      + length      = 16
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (sensitive value)
+      + special     = false
+      + upper       = true
+    }
+
+  # module.three-tier.module.db_sg.aws_security_group.this_name_prefix[0] will be created
+  + resource "aws_security_group" "this_name_prefix" {
+      + arn                    = (known after apply)
+      + description            = "PostgreSQL security group"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "db-"
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "db"
+          + "Terraform"   = "true"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "db"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                 = (known after apply)
+
+      + timeouts {
+          + create = "10m"
+          + delete = "15m"
+        }
+    }
+
+  # module.three-tier.module.db_sg.aws_security_group_rule.ingress_with_source_security_group_id[0] will be created
+  + resource "aws_security_group_rule" "ingress_with_source_security_group_id" {
+      + description              = "PostgreSQL access from ASG"
+      + from_port                = 5432
+      + id                       = (known after apply)
+      + prefix_list_ids          = []
+      + protocol                 = "tcp"
+      + security_group_id        = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 5432
+      + type                     = "ingress"
+    }
+
+  # module.three-tier.module.vpc.aws_db_subnet_group.database[0] will be created
+  + resource "aws_db_subnet_group" "database" {
+      + arn         = (known after apply)
+      + description = "Database subnet group for dev-three-tier"
+      + id          = (known after apply)
+      + name        = "dev-three-tier"
+      + name_prefix = (known after apply)
+      + subnet_ids  = (known after apply)
+      + tags        = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier"
+          + "Terraform"   = "true"
+        }
+      + tags_all    = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier"
+          + "Terraform"   = "true"
+        }
+    }
+
+  # module.three-tier.module.vpc.aws_internet_gateway.this[0] will be created
+  + resource "aws_internet_gateway" "this" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags     = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier"
+          + "Terraform"   = "true"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier"
+          + "Terraform"   = "true"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route.public_internet_gateway[0] will be created
+  + resource "aws_route" "public_internet_gateway" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+
+      + timeouts {
+          + create = "5m"
+        }
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.database[0] will be created
+  + resource "aws_route_table" "database" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.database[1] will be created
+  + resource "aws_route_table" "database" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.database[2] will be created
+  + resource "aws_route_table" "database" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.private[0] will be created
+  + resource "aws_route_table" "private" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.private[1] will be created
+  + resource "aws_route_table" "private" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.private[2] will be created
+  + resource "aws_route_table" "private" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table.public[0] will be created
+  + resource "aws_route_table" "public" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = (known after apply)
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.database[0] will be created
+  + resource "aws_route_table_association" "database" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.database[1] will be created
+  + resource "aws_route_table_association" "database" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.database[2] will be created
+  + resource "aws_route_table_association" "database" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.private[0] will be created
+  + resource "aws_route_table_association" "private" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.private[1] will be created
+  + resource "aws_route_table_association" "private" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.private[2] will be created
+  + resource "aws_route_table_association" "private" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.public[0] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.public[1] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_route_table_association.public[2] will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.database[0] will be created
+  + resource "aws_subnet" "database" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.21.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.database[1] will be created
+  + resource "aws_subnet" "database" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.22.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.database[2] will be created
+  + resource "aws_subnet" "database" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.23.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-db-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.private[0] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.private[1] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.2.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.private[2] will be created
+  + resource "aws_subnet" "private" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.3.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-private-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.public[0] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.101.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public-eu-west-1a"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.public[1] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.102.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public-eu-west-1b"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_subnet.public[2] will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "eu-west-1c"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.103.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier-public-eu-west-1c"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.three-tier.module.vpc.aws_vpc.this[0] will be created
+  + resource "aws_vpc" "this" {
+      + arn                                  = (known after apply)
+      + assign_generated_ipv6_cidr_block     = false
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_classiclink                   = (known after apply)
+      + enable_classiclink_dns_support       = (known after apply)
+      + enable_dns_hostnames                 = false
+      + enable_dns_support                   = true
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags                                 = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier"
+          + "Terraform"   = "true"
+        }
+      + tags_all                             = {
+          + "Environment" = "dev"
+          + "Name"        = "dev-three-tier"
+          + "Terraform"   = "true"
+        }
+    }
+
+  # module.three-tier.module.alb_http_sg.module.sg.aws_security_group.this_name_prefix[0] will be created
+  + resource "aws_security_group" "this_name_prefix" {
+      + arn                    = (known after apply)
+      + description            = "ALB Security group"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "alb-http-"
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "alb-http"
+          + "Terraform"   = "true"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "alb-http"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                 = (known after apply)
+
+      + timeouts {
+          + create = "10m"
+          + delete = "15m"
+        }
+    }
+
+  # module.three-tier.module.alb_http_sg.module.sg.aws_security_group_rule.egress_rules[0] will be created
+  + resource "aws_security_group_rule" "egress_rules" {
+      + cidr_blocks              = [
+          + "0.0.0.0/0",
+        ]
+      + description              = "All protocols"
+      + from_port                = -1
+      + id                       = (known after apply)
+      + ipv6_cidr_blocks         = [
+          + "::/0",
+        ]
+      + prefix_list_ids          = []
+      + protocol                 = "-1"
+      + security_group_id        = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = -1
+      + type                     = "egress"
+    }
+
+  # module.three-tier.module.alb_http_sg.module.sg.aws_security_group_rule.ingress_rules[0] will be created
+  + resource "aws_security_group_rule" "ingress_rules" {
+      + cidr_blocks              = [
+          + "0.0.0.0/0",
+        ]
+      + description              = "HTTP"
+      + from_port                = 80
+      + id                       = (known after apply)
+      + ipv6_cidr_blocks         = []
+      + prefix_list_ids          = []
+      + protocol                 = "tcp"
+      + security_group_id        = (known after apply)
+      + self                     = false
+      + source_security_group_id = (known after apply)
+      + to_port                  = 80
+      + type                     = "ingress"
+    }
+
+  # module.three-tier.module.alb_http_sg.module.sg.aws_security_group_rule.ingress_with_self[0] will be created
+  + resource "aws_security_group_rule" "ingress_with_self" {
+      + description              = "Ingress Rule"
+      + from_port                = -1
+      + id                       = (known after apply)
+      + prefix_list_ids          = []
+      + protocol                 = "-1"
+      + security_group_id        = (known after apply)
+      + self                     = true
+      + source_security_group_id = (known after apply)
+      + to_port                  = -1
+      + type                     = "ingress"
+    }
+
+  # module.three-tier.module.db.module.db_instance.aws_cloudwatch_log_group.this["postgresql"] will be created
+  + resource "aws_cloudwatch_log_group" "this" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + name              = "/aws/rds/instance/dev/postgresql"
+      + retention_in_days = 7
+      + tags              = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + tags_all          = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+    }
+
+  # module.three-tier.module.db.module.db_instance.aws_cloudwatch_log_group.this["upgrade"] will be created
+  + resource "aws_cloudwatch_log_group" "this" {
+      + arn               = (known after apply)
+      + id                = (known after apply)
+      + name              = "/aws/rds/instance/dev/upgrade"
+      + retention_in_days = 7
+      + tags              = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + tags_all          = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+    }
+
+  # module.three-tier.module.db.module.db_instance.aws_db_instance.this[0] will be created
+  + resource "aws_db_instance" "this" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + allow_major_version_upgrade           = false
+      + apply_immediately                     = false
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = 0
+      + backup_window                         = "03:00-06:00"
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + db_name                               = "dev"
+      + db_subnet_group_name                  = (known after apply)
+      + delete_automated_backups              = true
+      + deletion_protection                   = false
+      + enabled_cloudwatch_logs_exports       = [
+          + "postgresql",
+          + "upgrade",
+        ]
+      + endpoint                              = (known after apply)
+      + engine                                = "postgres"
+      + engine_version                        = "14.1"
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + iam_database_authentication_enabled   = false
+      + id                                    = (known after apply)
+      + identifier                            = "dev"
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t4g.medium"
+      + iops                                  = 0
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + maintenance_window                    = "mon:00:00-mon:03:00"
+      + max_allocated_storage                 = 100
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = true
+      + name                                  = (known after apply)
+      + nchar_character_set_name              = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + password                              = (sensitive value)
+      + performance_insights_enabled          = false
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = (known after apply)
+      + port                                  = 5432
+      + publicly_accessible                   = false
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_encrypted                     = true
+      + storage_type                          = (known after apply)
+      + tags                                  = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + tags_all                              = {
+          + "Environment" = "dev"
+          + "Terraform"   = "true"
+        }
+      + timezone                              = (known after apply)
+      + username                              = "devuser"
+      + vpc_security_group_ids                = (known after apply)
+
+      + timeouts {}
+    }
+
+  # module.three-tier.module.db.module.db_parameter_group.aws_db_parameter_group.this[0] will be created
+  + resource "aws_db_parameter_group" "this" {
+      + arn         = (known after apply)
+      + description = "dev parameter group"
+      + family      = "postgres14"
+      + id          = (known after apply)
+      + name        = (known after apply)
+      + name_prefix = "dev-"
+      + tags        = {
+          + "Environment" = "dev"
+          + "Name"        = "dev"
+          + "Terraform"   = "true"
+        }
+      + tags_all    = {
+          + "Environment" = "dev"
+          + "Name"        = "dev"
+          + "Terraform"   = "true"
+        }
+    }
+
+Plan: 48 to add, 0 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
